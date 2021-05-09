@@ -1,8 +1,8 @@
 -- Your SQL goes here
-CREATE TABLE events {
-    id GUID PRIMARY KEY,
-    name VARCHAR NOT NULL,
+CREATE TABLE events (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
     description TEXT,
-    location VARCHAR NOT NULL,
-    host VARCHAR NOT NULL
-}
+    location VARCHAR(100) NOT NULL,
+    host VARCHAR(40) NOT NULL
+)

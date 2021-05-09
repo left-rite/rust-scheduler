@@ -1,2 +1,2 @@
 [global.databases]
-scheduler_events = { url = "mysql://root:@localhost/scheduler" }
+scheduler = { url = "mysql://root:@localhost/scheduler" }

@@ -1,7 +1,13 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-#[macro_use] extern crate rocket;
-use models;
+#[macro_use] 
+extern crate rocket;
+extern crate rocket_contrib;
+#[macro_use] 
+extern crate diesel;
+
+mod models;
+mod schema;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -10,7 +16,7 @@ fn index() -> &'static str {
 
 fn main() {
     rocket::ignite()
-       .attach(SchedulerDbConn::fairing())
+       .attach(models::SchedulerDbConn::fairing())
        .mount("/", routes![index])
     //    .mount("/events/create", routes![index])
     //    .mount("/events/show", routes![index])

@@ -1,7 +1,7 @@
 -- Your SQL goes here
-CREATE TABLE invitations {
-    id GUID PRIMARY KEY,
-    eventID GUID NOT NULL,
-    invitee STRING NOT NULL,
-    FOREIGN KEY(eventID) REFERENCES events(id)
-}
+CREATE TABLE invitations (
+    id VARCHAR(36) PRIMARY KEY,
+    event_id VARCHAR(36) NOT NULL,
+    invitee VARCHAR(15) NOT NULL,
+    FOREIGN KEY(event_id) REFERENCES events(id)
+)

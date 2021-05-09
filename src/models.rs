@@ -1,9 +1,13 @@
+use rocket_contrib::database;
 use rocket_contrib::databases::diesel;
 
-#[database("scheduler_events")]
-struct SchedulerDbConn(diesel::MysqlConnection);
+#[database("scheduler")]
+pub struct SchedulerDbConn(diesel::MysqlConnection);
 
-#[derive(Queryable)]
+use crate::schema::{events, invitations, options};
+
+#[derive(Identifiable, Queryable)]
+#[table_name = "events"]
 pub struct Event {
     pub id: String,
     pub name: String,
@@ -12,18 +16,21 @@ pub struct Event {
     pub host: String
 }
 
-#[derive(Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(Event)]
-pub struct Invite {
+#[table_name = "invitations"]
+pub struct Invitation {
     pub id: String,
-    pub event: String,
+    pub event_id: String,
     pub invitee: String,
 }
 
-#[derive(Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations)]
 #[belongs_to(Event)]
-pub struct Options {
+#[table_name = "options"]
+pub struct EventOption {
     pub id: i32,
     pub description: String,
     pub count: i32,
+    pub event_id: String
 }
