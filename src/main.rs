@@ -8,8 +8,11 @@ extern crate diesel;
 
 mod models;
 mod schema;
+mod dtos;
 
 use rocket_contrib::templates::Template;
+use rocket::request::Form;
+use dtos::ProposedEvent;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -17,15 +20,20 @@ fn index() -> &'static str {
 }
 
 #[get("/create")]
-fn create() -> Template {
+fn create_event_page() -> Template {
     Template::render("create_event", {})
+}
+
+#[post("/create", data = "<proposed_event>")]
+fn create_event(proposed_event: Form<ProposedEvent>) -> String {
+    format!("New event: {} \n {}", proposed_event.name, proposed_event.description)
 }
 
 fn main() {
     rocket::ignite()
        .attach(models::SchedulerDbConn::fairing())
        .mount("/", routes![index])
-       .mount("/events", routes![create])
+       .mount("/events", routes![create_event_page, create_event])
     //    .mount("/events/show", routes![index])
     //    .mount("/events/edit", routes![index])
     //    .mount("/events/signup", routes![index])
