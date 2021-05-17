@@ -1,19 +1,62 @@
-<html>
-  <head>
-    <title>
-      Create Event
-    </title>
-  </head>
-  <body>
-    <h1>
-      Create Event
-    </h1>
-    <form action="/events/create" method="post">
-      <div><label>Name</label><input name=name></div>
-      <div><label>Description</label><textarea name=description></textarea></div>
-      <div><label>Location</label><input name=location></div>
-      <div><label>Host</label><input name=host></div>
-      <div><button type="submit">Submit</button></div>
+{{#> base title="Create Event" }}
+
+  {{#*inline "content"}}
+    <form action="/events/create" method="post" class="grid-container">
+      <h1>Create a new event</h1>
+      <div class="row"><label>Name</label><input name="name"></div>
+      <div class="row"><label>Description</label><textarea name="description"></textarea></div>
+      <div class="row"><label>Location</label><input name="location"></div>
+      <div class="row"><label>Host</label><input name="host" placeholder="Your name here"></div>
+      <div class="">
+        <h2>Invite People</h2>
+        <ul class="tabs" data-tabs id="invitee-tabs">
+          <li class="tabs-title is-active"><a href="#invitee0" aria-selected="true">New invitee</a></li>
+        </ul>
+        <div class="tabs-content" id="invitee-tabs-content" data-tabs-content="invitee-tabs">
+          <div class="tabs-panel is-active" id="invitee0">
+            <input name="invitee[]" onchange="changeTabName(this)">
+          </div>
+        </div>
+        <button type="button" class="success button" onclick="addTab('invitee')">Add invitee</button>
+        <button type="button" class="alert button"  onclick="deleteTab('invitee')">Delete invitee</button>
+      </div>
+      <div class="">
+        <h2>Add Option</h2>
+        <ul class="tabs" data-tabs id="option-tabs">
+          <li class="tabs-title is-active"><a href="#option0" aria-selected="true">New option</a></li>
+        </ul>
+        <div class="tabs-content" id="option-tabs-content" data-tabs-content="option-tabs">
+          <div class="tabs-panel is-active" id="option0">
+            <input name="option[]" onchange="changeTabName(this)">
+          </div>
+        </div>
+        <button type="button" class="success button" onclick="addTab('option')">Add option</button>
+        <button type="button" class="alert button" onclick="deleteTab('option')">Delete option</button>
+      </div>
+      <div class="row"><input type="submit" class="button" value="Submit"></div>
     </form>
-  </body>
-</html>
+  {{/inline}}
+
+  {{#*inline "scripts-block"}}
+    function addTab(type){
+      var li = document.getElementById(type + "-tabs");
+		  var tabId = type + li.childElementCount;
+      
+		  li.insertAdjacentHTML('beforeEnd', '<li class="tabs-title"><a href="#' + tabId + '" role="tab">New ' + type + '</a></li>');
+		  document.getElementById(type + "-tabs-content").insertAdjacentHTML('beforeEnd', '<div class="tabs-panel" id="' + tabId + '" role="tabpanel" aria-hidden="true"><input name="' + type + '[]"  onchange="changeTabName(this)"></div>');
+      
+      $(li).foundation();
+      Foundation.reInit($("#" + type + "-tabs"))
+    }
+
+    function deleteTab(type){
+      $("#" + type + "-tabs > .is-active").remove()
+      $("#" + type + "-tabs-content > .is-active").remove()
+    }
+
+    function changeTabName(element){
+      // Set the tab name to the value
+      $("a[href='#" + element.parentElement.id + "']")[0].innerText = element.value;
+    }
+  {{/inline}}
+{{ /base}}
