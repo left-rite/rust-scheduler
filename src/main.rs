@@ -6,13 +6,14 @@ extern crate rocket_contrib;
 #[macro_use] 
 extern crate diesel;
 
+#[path = "forms/proposed_event.rs"] mod proposed_event;
+
 mod models;
 mod schema;
-mod dtos;
 
 use rocket_contrib::templates::Template;
 use rocket::request::Form;
-use dtos::ProposedEvent;
+use proposed_event::ProposedEvent;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -26,7 +27,9 @@ fn create_event_page() -> Template {
 
 #[post("/create", data = "<proposed_event>")]
 fn create_event(proposed_event: Form<ProposedEvent>) -> String {
-    format!("New event: {} \n {}", proposed_event.name, proposed_event.description)
+    println!("{:?}", proposed_event);
+    format!("New event: {} \n{}\nInvitees: {:#?}", proposed_event.name, proposed_event.description, proposed_event.invitees)
+
 }
 
 fn main() {
